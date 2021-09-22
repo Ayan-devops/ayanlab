@@ -1,10 +1,14 @@
 package my.lab.lab;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import java.util.HashSet;
+
+import java.util.Set;
+
+import javax.management.relation.Role;
 import javax.validation.constraints.Email;
+import javax.persistence.JoinColumn;
+import javax.persistence.*;
+
 
 import com.sun.istack.NotNull;
 
@@ -56,7 +60,41 @@ public class User {
 	@NotNull @javax.validation.constraints.NotBlank (message = "Name is mandatory")
     private String lastname;
 	 
-	 @NotNull @javax.validation.constraints.NotBlank (message = "Name is mandatory") @Email(message = "Email Should be Valid")
+	 @Column (name= "email") @NotNull @javax.validation.constraints.NotBlank (message = "Name is mandatory") @Email(message = "Email Should be Valid")
 	    private String email;
+	 
+	 @NotNull @javax.validation.constraints.NotBlank (message = "Password is mandatory") 
+	    private String password;
+	
+     
+     
+    
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	
+	
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(	name = "user_roles", 
+				joinColumns = @JoinColumn(name = "user_id"), 
+				inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	
+	
 	
 }
